@@ -7,4 +7,10 @@
     <string name="taskListLabel">Task Listing</string>
     <string name="addTaskLabel">Add New Task</string>
     <string name="menu_home">Home</string>
+    <string name="task_title">Task Title</string>
+    <string name="task_body">Task Body</string>
+    <string name="add_task_image">Add Task Image</string>
+    <string name="add_img">AddImg</string>
+    <string name="image_preview">Image Preview</string>
+    <string name="add_task">Add Task</string>
 </resources>

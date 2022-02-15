@@ -11,4 +11,5 @@
     <!--  Project Color  -->
     <color name="traffic_purple"> #A03472</color>
     <color name="pastel_blue">#5D9B9B</color>
+    <color name="hint_color">#757575</color>
 </resources>
