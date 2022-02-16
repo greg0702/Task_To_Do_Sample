@@ -1,6 +1,7 @@
 package my.com.tasktodosample.viewmodel
 
 import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,7 +10,7 @@ import my.com.tasktodosample.data.TaskDatabase
 import my.com.tasktodosample.model.Task
 import my.com.tasktodosample.repository.TaskRepository
 
-class TaskViewModel(application: Application): ViewModel(){
+class TaskViewModel(application: Application): AndroidViewModel(application){
 
     private val tasksList: LiveData<List<Task>>
     private val taskRepo: TaskRepository

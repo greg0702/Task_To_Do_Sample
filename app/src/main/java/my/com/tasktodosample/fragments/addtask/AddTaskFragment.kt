@@ -15,6 +15,8 @@ import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -23,6 +25,8 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import my.com.tasktodosample.R
 import my.com.tasktodosample.databinding.FragmentAddTaskBinding
+import my.com.tasktodosample.model.Task
+import my.com.tasktodosample.viewmodel.TaskViewModel
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -37,11 +41,15 @@ class AddTaskFragment : Fragment() {
     private var currentImagePath: String = ""
 
     private lateinit var binding: FragmentAddTaskBinding
+    private lateinit var taskViewModel: TaskViewModel
+
     private val nav by lazy { findNavController() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         binding = FragmentAddTaskBinding.inflate(inflater, container, false)
+
+        taskViewModel = ViewModelProvider(this).get(TaskViewModel::class.java)
 
         binding.btnRemoveImg.isVisible = false
 
@@ -170,7 +178,15 @@ class AddTaskFragment : Fragment() {
             Log.d(TAG, "Image from $imagePath is stored")
         }
 
+        val task = Task(0, title, body, imagePath)
+
+        taskViewModel.addTask(task)
+
+        Log.d(TAG, "Task $title added successful!")
+
         Toast.makeText(requireContext(), "Task $title is added!", Toast.LENGTH_SHORT).show()
+
+        nav.navigate(R.id.action_addTaskFragment_to_taskListFragment)
 
     }
 
