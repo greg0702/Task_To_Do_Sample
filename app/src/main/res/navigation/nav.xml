@@ -21,6 +21,8 @@
         tools:layout="@layout/fragment_add_task" >
         <action
             android:id="@+id/action_addTaskFragment_to_taskListFragment"
-            app:destination="@id/taskListFragment" />
+            app:destination="@id/taskListFragment"
+            app:popUpTo="@id/nav"
+            app:popUpToInclusive="true"/>
     </fragment>
 </navigation>
