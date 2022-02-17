@@ -88,13 +88,12 @@
         android:id="@+id/imgUpdatePreviewLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:padding="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnUpdateTask"
+        app:layout_constraintBottom_toTopOf="@+id/btnLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/updateImgBtn"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp">
+        app:layout_constraintTop_toBottomOf="@+id/updateImgBtn">
 
         <ImageView
             android:id="@+id/imgUpdatePreview"
@@ -114,18 +113,38 @@
             tools:ignore="ContentDescription" />
     </FrameLayout>
 
-    <Button
-        android:id="@+id/btnUpdateTask"
+    <LinearLayout
+        android:id="@+id/btnLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="@color/pastel_blue"
-        android:text="@string/update_task_header"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/btnUpdateTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/pastel_blue"
+            android:text="@string/update_task_header"
+            tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
+
+        <Button
+            android:id="@+id/btnCompleted"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/pastel_blue"
+            android:text="@string/complete_task"
+            tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

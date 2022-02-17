@@ -8,9 +8,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
@@ -52,19 +50,102 @@ class UpdateTaskFragment : Fragment() {
 
         binding = FragmentUpdateTaskBinding.inflate(inflater, container, false)
 
-        taskViewModel = ViewModelProvider(this).get(TaskViewModel::class.java)
+        taskViewModel = ViewModelProvider(this)[TaskViewModel::class.java]
+
+        if (args.currentTask.taskCompleted){
+            binding.txtUpdateTitle.isEnabled = false
+            binding.txtUpdateBody.isEnabled = false
+            binding.updateImgBtn.isVisible = false
+            binding.btnUpdateTask.isEnabled = false
+            binding.btnCompleted.text = "Undone Task"
+
+            binding.btnCompleted.setOnClickListener { confirmUndoneTask() }
+
+        }else{
+
+            binding.updateImgBtn.setOnClickListener { selectImage() }
+
+            binding.btnUpdateTask.setOnClickListener { inputChecking(args.currentTask.taskCompleted, false) }
+
+            binding.btnCompleted.setOnClickListener { confirmCompleteTask() }
+
+        }
 
         lockDrawer()
 
         loadTask()
 
-        binding.updateImgBtn.setOnClickListener { selectImage() }
-
-        binding.btnUpdateTask.setOnClickListener { inputChecking() }
+        setHasOptionsMenu(true)
 
         return binding.root
 
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) { inflater.inflate(R.menu.delete_menu, menu) }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        if (item.itemId == R.id.menu_delete){ confirmDeleteTask() }
+        return super.onOptionsItemSelected(item)
+
+    }
+
+    private fun confirmDeleteTask() {
+
+        val builder = AlertDialog.Builder(requireContext())
+
+        builder.setTitle("Delete Task?")
+        builder.setMessage("Are you sure to delete task ${args.currentTask.taskTitle}?")
+
+        builder.setPositiveButton("Yes"){ _, _ -> deleteTask() }
+
+        builder.setNegativeButton("No"){ _, _ ->  }
+
+        builder.show()
+
+    }
+
+    private fun deleteTask() {
+
+        taskViewModel.deleteTask(args.currentTask)
+        Toast.makeText(requireContext(), "Task ${args.currentTask.taskTitle} is successfully deleted!", Toast.LENGTH_SHORT).show()
+        nav.navigate(R.id.action_updateTaskFragment_to_taskListFragment)
+
+    }
+
+    private fun confirmUndoneTask() {
+
+        val builder = AlertDialog.Builder(requireContext())
+
+        builder.setTitle("Undone Task?")
+        builder.setMessage("Are you sure to undone task ${args.currentTask.taskTitle}?")
+
+        builder.setPositiveButton("Yes"){ _, _ -> undoneTask() }
+
+        builder.setNegativeButton("No"){ _, _ ->  }
+
+        builder.show()
+
+    }
+
+    private fun undoneTask() { inputChecking(completed = false, isUndone = true) }
+
+    private fun confirmCompleteTask() {
+
+        val builder = AlertDialog.Builder(requireContext())
+
+        builder.setTitle("Complete Task?")
+        builder.setMessage("Are you sure to complete task ${args.currentTask.taskTitle}?")
+
+        builder.setPositiveButton("Yes"){ _, _ -> completeTask() }
+
+        builder.setNegativeButton("No"){ _, _ ->  }
+
+        builder.show()
+
+    }
+
+    private fun completeTask() { inputChecking(completed = true, isUndone = false) }
 
     private fun loadTask() {
 
@@ -73,7 +154,9 @@ class UpdateTaskFragment : Fragment() {
 
         loadImage(args.currentTask.taskImage)
 
-        binding.btnRemoveUpdateImg.setOnClickListener { removeImage() }
+        currentImagePath = args.currentTask.taskImage
+
+        if (args.currentTask.taskCompleted){ binding.btnRemoveUpdateImg.isVisible = false }
 
     }
 
@@ -133,29 +216,24 @@ class UpdateTaskFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-
             binding.btnRemoveUpdateImg.isVisible = true
-
             Log.d(TAG, currentImagePath)
         }
 
         if (requestCode == REQUEST_SELECT_IMAGE && resultCode == Activity.RESULT_OK){
             currentImagePath = data?.data.toString()
-
             binding.btnRemoveUpdateImg.isVisible = true
-
             Log.d(TAG, currentImagePath)
         }
 
         loadImage(currentImagePath)
-
-        binding.btnRemoveUpdateImg.setOnClickListener { removeImage() }
 
     }
 
     private fun removeImage() {
         binding.imgUpdatePreview.setImageResource(R.drawable.img_placeholder)
         binding.btnRemoveUpdateImg.isVisible = false
+        currentImagePath = ""
     }
 
     private fun loadImage(path: String){
@@ -184,38 +262,47 @@ class UpdateTaskFragment : Fragment() {
                     }
                 })
                 .into(binding.imgUpdatePreview)
-
             binding.btnRemoveUpdateImg.isVisible = true
+
+            binding.btnRemoveUpdateImg.setOnClickListener { removeImage() }
+
         }
 
     }
 
-    private fun inputChecking() {
+    private fun inputChecking(completed: Boolean, isUndone: Boolean) {
 
         val title = binding.txtUpdateTitle.text.toString()
         val body = binding.txtUpdateBody.text.toString()
 
-        if (title.isEmpty() || body.isEmpty()){
-            Toast.makeText(requireContext(), "Task Title and/or Body cannot be empty!", Toast.LENGTH_SHORT).show()
-        }else{ updateTask(title,body,currentImagePath) }
+        if (title.isEmpty() || body.isEmpty()){ Toast.makeText(requireContext(), "Task Title and/or Body cannot be empty!", Toast.LENGTH_SHORT).show() }
+        else{ updateTask(title,body,currentImagePath, completed, isUndone) }
 
     }
 
-    private fun updateTask(title: String, body: String, imagePath: String) {
+    private fun updateTask(title: String, body: String, imagePath: String, completed: Boolean, isUndone:Boolean) {
 
-        if (imagePath == ""){
-            Log.d(TAG,"No Image selected or taken")
-        }else{
-            Log.d(TAG, "Image from $imagePath is stored")
-        }
+        if (imagePath == ""){ Log.d(TAG,"No Image selected or taken") }
+        else{ Log.d(TAG, "Image from $imagePath is stored") }
 
-        val task = Task(args.currentTask.id, title, body, imagePath)
+        val task = Task(args.currentTask.id, title, body, imagePath,completed)
 
         taskViewModel.updateTask(task)
 
-        Log.d(TAG, "Task $title updated successful!")
-
-        Toast.makeText(requireContext(), "Task $title is updated!", Toast.LENGTH_SHORT).show()
+        when {
+            completed -> {
+                Log.d(TAG, "Task $title completed successful!")
+                Toast.makeText(requireContext(), "Task $title is completed!", Toast.LENGTH_SHORT).show()
+            }
+            isUndone -> {
+                Log.d(TAG, "Task $title undone successful!")
+                Toast.makeText(requireContext(), "Task $title is undone!", Toast.LENGTH_SHORT).show()
+            }
+            else -> {
+                Log.d(TAG, "Task $title updated successful!")
+                Toast.makeText(requireContext(), "Task $title is updated!", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         nav.navigate(R.id.action_updateTaskFragment_to_taskListFragment)
 

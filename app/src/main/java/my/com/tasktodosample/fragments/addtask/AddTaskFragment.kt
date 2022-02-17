@@ -156,6 +156,7 @@ class AddTaskFragment : Fragment() {
     private fun removeImage() {
         binding.imgPreview.setImageResource(R.drawable.img_placeholder)
         binding.btnRemoveImg.isVisible = false
+        currentImagePath = ""
     }
 
     private fun inputChecking() {

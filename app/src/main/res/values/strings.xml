@@ -16,4 +16,6 @@
     <string name="update_task_header">Update Task</string>
     <string name="update_task_image">Update Task Image (Optional)</string>
     <string name="update_task_label">Update Task</string>
+    <string name="complete_task">Complete Task</string>
+    <string name="delete_menu_item">Delete</string>
 </resources>
