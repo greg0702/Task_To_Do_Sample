@@ -25,13 +25,9 @@ abstract class TaskDatabase: RoomDatabase() {
             }
 
             synchronized(this){
-
                 val instance = Room.databaseBuilder(context.applicationContext, TaskDatabase::class.java,"task_database").build()
-
                 dbInstance = instance
-
                 return instance
-
             }
 
         }

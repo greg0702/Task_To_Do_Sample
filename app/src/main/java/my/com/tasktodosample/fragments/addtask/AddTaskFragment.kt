@@ -66,11 +66,8 @@ class AddTaskFragment : Fragment() {
 
         builder.setTitle("Add Task Image")
         builder.setMessage("Take Photo for Image or Select From Gallery?")
-
         builder.setPositiveButton("Open Camera"){ _, _ -> startCamera() }
-
         builder.setNegativeButton("Select From Gallery"){ _, _ -> openGallery() }
-
         builder.show()
 
     }
@@ -116,17 +113,13 @@ class AddTaskFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-
             binding.btnRemoveImg.isVisible = true
-
             Log.d(TAG, currentImagePath)
         }
 
         if (requestCode == REQUEST_SELECT_IMAGE && resultCode == RESULT_OK){
             currentImagePath = data?.data.toString()
-
             binding.btnRemoveImg.isVisible = true
-
             Log.d(TAG, currentImagePath)
         }
 
@@ -164,19 +157,15 @@ class AddTaskFragment : Fragment() {
         val title = binding.txtTitle.text.toString()
         val body = binding.txtBody.text.toString()
 
-        if (title.isEmpty() || body.isEmpty()){
-            Toast.makeText(requireContext(), "Task Title and/or Body cannot be empty!", Toast.LENGTH_SHORT).show()
-        }else{ addTask(title,body,currentImagePath) }
+        if (title.isEmpty() || body.isEmpty()){ Toast.makeText(requireContext(), "Task Title and/or Body cannot be empty!", Toast.LENGTH_SHORT).show() }
+        else{ addTask(title,body,currentImagePath) }
 
     }
 
     private fun addTask(title: String, body: String, imagePath: String) {
 
-        if (imagePath == ""){
-            Log.d(TAG,"No Image selected or taken")
-        }else{
-            Log.d(TAG, "Image from $imagePath is stored")
-        }
+        if (imagePath == ""){ Log.d(TAG,"No Image selected or taken") }
+        else{ Log.d(TAG, "Image from $imagePath is stored") }
 
         val task = Task(0, title, body, imagePath, false)
 

@@ -62,13 +62,9 @@ class UpdateTaskFragment : Fragment() {
             binding.btnCompleted.setOnClickListener { confirmUndoneTask() }
 
         }else{
-
             binding.updateImgBtn.setOnClickListener { selectImage() }
-
             binding.btnUpdateTask.setOnClickListener { inputChecking(args.currentTask.taskCompleted, false) }
-
             binding.btnCompleted.setOnClickListener { confirmCompleteTask() }
-
         }
 
         lockDrawer()
@@ -84,10 +80,8 @@ class UpdateTaskFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) { inflater.inflate(R.menu.delete_menu, menu) }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
         if (item.itemId == R.id.menu_delete){ confirmDeleteTask() }
         return super.onOptionsItemSelected(item)
-
     }
 
     private fun confirmDeleteTask() {
@@ -96,21 +90,16 @@ class UpdateTaskFragment : Fragment() {
 
         builder.setTitle("Delete Task?")
         builder.setMessage("Are you sure to delete task ${args.currentTask.taskTitle}?")
-
         builder.setPositiveButton("Yes"){ _, _ -> deleteTask() }
-
         builder.setNegativeButton("No"){ _, _ ->  }
-
         builder.show()
 
     }
 
     private fun deleteTask() {
-
         taskViewModel.deleteTask(args.currentTask)
         Toast.makeText(requireContext(), "Task ${args.currentTask.taskTitle} is successfully deleted!", Toast.LENGTH_SHORT).show()
         nav.navigate(R.id.action_updateTaskFragment_to_taskListFragment)
-
     }
 
     private fun confirmUndoneTask() {
@@ -119,11 +108,8 @@ class UpdateTaskFragment : Fragment() {
 
         builder.setTitle("Undone Task?")
         builder.setMessage("Are you sure to undone task ${args.currentTask.taskTitle}?")
-
         builder.setPositiveButton("Yes"){ _, _ -> undoneTask() }
-
         builder.setNegativeButton("No"){ _, _ ->  }
-
         builder.show()
 
     }
@@ -136,11 +122,8 @@ class UpdateTaskFragment : Fragment() {
 
         builder.setTitle("Complete Task?")
         builder.setMessage("Are you sure to complete task ${args.currentTask.taskTitle}?")
-
         builder.setPositiveButton("Yes"){ _, _ -> completeTask() }
-
         builder.setNegativeButton("No"){ _, _ ->  }
-
         builder.show()
 
     }
@@ -166,22 +149,17 @@ class UpdateTaskFragment : Fragment() {
 
         builder.setTitle("Add Task Image")
         builder.setMessage("Take Photo for Image or Select From Gallery?")
-
         builder.setPositiveButton("Open Camera"){ _, _ -> startCamera() }
-
         builder.setNegativeButton("Select From Gallery"){ _, _ -> openGallery() }
-
         builder.show()
 
     }
 
     private fun openGallery() {
-
         val selectImageIntent = Intent(Intent.ACTION_GET_CONTENT)
         selectImageIntent.type = "image/*"
 
         requireActivity().startActivityFromFragment(this, Intent.createChooser(selectImageIntent, "Select Image"), REQUEST_SELECT_IMAGE)
-
     }
 
     private fun startCamera(){

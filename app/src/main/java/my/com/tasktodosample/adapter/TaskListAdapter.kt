@@ -73,7 +73,7 @@ class TaskListAdapter: RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
 
     }
 
-    override fun getItemCount(): Int { return this.taskList.size }
+    override fun getItemCount(): Int { return taskList.size }
 
 
 

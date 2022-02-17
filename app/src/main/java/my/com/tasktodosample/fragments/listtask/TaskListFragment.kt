@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -37,6 +36,8 @@ class TaskListFragment : Fragment() {
         taskViewModel.getAllTasks().observe(viewLifecycleOwner) { task ->
             adapter.setTaskList(task)
 
+            Log.d(TAG, adapter.itemCount.toString())
+
             if (adapter.itemCount == 0){ setHasOptionsMenu(false) }
             else{ setHasOptionsMenu(true) }
         }
@@ -55,20 +56,19 @@ class TaskListFragment : Fragment() {
     }
 
     private fun confirmDeleteAllTasks() {
-        val builder = AlertDialog.Builder(requireContext())
 
+        val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Delete All Tasks?")
         builder.setMessage("Are you sure to delete all tasks?")
-
         builder.setPositiveButton("Yes"){ _, _ -> deleteAllTasks() }
-
         builder.setNegativeButton("No"){ _, _ ->  }
-
         builder.show()
+
     }
 
     private fun deleteAllTasks() {
         taskViewModel.deleteAllTasks()
+        Log.d(TAG, "All tasks deleted!")
         Toast.makeText(requireContext(), "All tasks are deleted successfully!", Toast.LENGTH_SHORT).show()
     }
 

@@ -31,16 +31,10 @@ class MainActivity : AppCompatActivity(), DrawerController {
 
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return nav.navigateUp(appBarConfig) || super.onSupportNavigateUp()
-    }
+    override fun onSupportNavigateUp(): Boolean { return nav.navigateUp(appBarConfig) || super.onSupportNavigateUp() }
 
-    override fun setDrawerLocked() {
-        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-    }
+    override fun setDrawerLocked() { binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) }
 
-    override fun setDrawerUnlocked() {
-        binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-    }
+    override fun setDrawerUnlocked() { binding.drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED) }
 
 }

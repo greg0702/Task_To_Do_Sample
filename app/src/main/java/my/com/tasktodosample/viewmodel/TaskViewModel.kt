@@ -3,7 +3,6 @@ package my.com.tasktodosample.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import my.com.tasktodosample.data.TaskDatabase
@@ -16,11 +15,9 @@ class TaskViewModel(application: Application): AndroidViewModel(application){
     private val taskRepo: TaskRepository
 
     init {
-
         val taskDao = TaskDatabase.getDb(application).taskDao()
         taskRepo = TaskRepository(taskDao)
         tasksList = taskRepo.getTaskList
-
     }
 
     fun addTask(task: Task){
