@@ -22,6 +22,7 @@ class TaskListAdapter: RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
         val root = view
         val txtTitle: TextView = view.findViewById(R.id.txtTitle)
         val itemLayout: LinearLayout = view.findViewById(R.id.task_item_layout)
+        val txtTaskCompleted: TextView = view.findViewById(R.id.txtTaskCompleted)
 
     }
 
@@ -48,6 +49,12 @@ class TaskListAdapter: RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
         val currentTask = taskList[position]
 
         holder.txtTitle.text = currentTask.taskTitle
+
+        if (!currentTask.taskCompleted){
+            holder.txtTaskCompleted.text = "Task Incomplete"
+        }else{
+            holder.txtTaskCompleted.text = "Task Completed"
+        }
 
         if (position % 2 == 1){
             holder.itemLayout.setBackgroundColor(ContextCompat.getColor(holder.context, R.color.pastel_blue))

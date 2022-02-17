@@ -48,7 +48,7 @@ class AddTaskFragment : Fragment() {
 
         binding = FragmentAddTaskBinding.inflate(inflater, container, false)
 
-        taskViewModel = ViewModelProvider(this).get(TaskViewModel::class.java)
+        taskViewModel = ViewModelProvider(this)[TaskViewModel::class.java]
 
         binding.btnRemoveImg.isVisible = false
 
@@ -177,7 +177,7 @@ class AddTaskFragment : Fragment() {
             Log.d(TAG, "Image from $imagePath is stored")
         }
 
-        val task = Task(0, title, body, imagePath)
+        val task = Task(0, title, body, imagePath, false)
 
         taskViewModel.addTask(task)
 

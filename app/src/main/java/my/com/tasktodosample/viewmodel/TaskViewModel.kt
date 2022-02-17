@@ -31,6 +31,14 @@ class TaskViewModel(application: Application): AndroidViewModel(application){
         viewModelScope.launch { taskRepo.updateTask(task) }
     }
 
+    fun deleteTask(task: Task){
+        viewModelScope.launch { taskRepo.deleteTask(task) }
+    }
+
+    fun deleteAllTasks(){
+        viewModelScope.launch { taskRepo.deleteAllTask() }
+    }
+
     fun getAllTasks(): LiveData<List<Task>>{ return tasksList }
 
 }

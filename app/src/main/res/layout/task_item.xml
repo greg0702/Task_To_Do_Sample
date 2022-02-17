@@ -9,31 +9,47 @@
         android:id="@+id/task_item_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:background="@color/traffic_purple"
-        android:orientation="horizontal"
-        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.05"
-            android:text="@string/title_hint"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.05"
+                android:text="@string/title_hint"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                tools:text="This is the task title" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/txtTitle"
-            android:layout_width="wrap_content"
+            android:id="@+id/txtTaskCompleted"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:padding="10dp"
             android:textColor="@color/white"
-            android:textSize="16sp"
-            tools:text="This is the task title" />
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:text="Incomplete" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

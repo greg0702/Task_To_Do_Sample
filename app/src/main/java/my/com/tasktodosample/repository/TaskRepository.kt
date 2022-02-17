@@ -14,4 +14,8 @@ class TaskRepository(taskDao: TaskDao) {
 
     suspend fun updateTask(task: Task){ taskDaoIns.updateTask(task) }
 
+    suspend fun deleteTask(task: Task){ taskDaoIns.deleteTask(task) }
+
+    suspend fun deleteAllTask(){ taskDaoIns.deleteAllTask() }
+
 }
