@@ -35,6 +35,8 @@ class TaskListAdapter: RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
             notifyItemRemoved(this.taskList.indexOf(it))
         }
 
+        notifyDataSetChanged()
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -71,7 +73,7 @@ class TaskListAdapter: RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
 
     }
 
-    override fun getItemCount(): Int { return taskList.size }
+    override fun getItemCount(): Int { return this.taskList.size }
 
 
 

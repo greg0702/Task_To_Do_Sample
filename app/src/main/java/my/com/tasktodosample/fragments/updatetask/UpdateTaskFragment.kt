@@ -36,7 +36,7 @@ class UpdateTaskFragment : Fragment() {
 
     private val args by navArgs<UpdateTaskFragmentArgs>()
 
-    private val TAG = "ToDoApp"
+    private val TAG = "TASK_APP_TAG"
     private val REQUEST_IMAGE_CAPTURE: Int = 123
     private val REQUEST_SELECT_IMAGE: Int = 200
     private var currentImagePath: String = ""
