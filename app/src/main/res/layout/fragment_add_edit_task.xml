@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.addtask.AddTaskFragment">
+    tools:context=".fragments.addedittask.AddEditTaskFragment">
 
     <TextView
-        android:id="@+id/txtAddTaskHeader"
+        android:id="@+id/txtTaskHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/pastel_blue"
-        android:text="@string/add_task"
+        android:text="@string/update_task_header"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="24sp"
@@ -27,7 +27,7 @@
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAddTaskHeader">
+        app:layout_constraintTop_toBottomOf="@+id/txtTaskHeader">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtTitle"
@@ -40,7 +40,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtBodyInputLayout"
+        android:id="@+id/txtUpdateBodyInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -59,11 +59,11 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/txtAddImg"
+        android:id="@+id/txtImg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/add_task_image"
+        android:text="@string/update_task_image"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/black"
@@ -71,30 +71,30 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtBodyInputLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/txtUpdateBodyInputLayout" />
 
     <ImageView
-        android:id="@+id/addImgBtn"
+        android:id="@+id/btnAddImg"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:contentDescription="@string/add_img"
         android:src="@drawable/ic_btn_add_img"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAddImg" />
+        app:layout_constraintTop_toBottomOf="@+id/txtImg" />
 
     <FrameLayout
         android:id="@+id/imgPreviewLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:padding="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnAddTask"
+        app:layout_constraintBottom_toTopOf="@+id/checkBoxCompleted"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addImgBtn"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp">
+        app:layout_constraintTop_toBottomOf="@+id/btnAddImg">
 
         <ImageView
             android:id="@+id/imgPreview"
@@ -115,17 +115,33 @@
     </FrameLayout>
 
     <Button
-        android:id="@+id/btnAddTask"
+        android:id="@+id/btnAddUpdateTask"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
         android:backgroundTint="@color/pastel_blue"
-        android:text="@string/add_task"
+        android:text="@string/update_task_header"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
+
+    <CheckBox
+        android:id="@+id/checkBoxCompleted"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/completed"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddUpdateTask"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

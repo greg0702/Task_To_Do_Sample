@@ -8,38 +8,19 @@
     <fragment
         android:id="@+id/taskListFragment"
         android:name="my.com.tasktodosample.fragments.listtask.TaskListFragment"
-        android:label="@string/taskListLabel"
         tools:layout="@layout/fragment_task_list" >
         <action
-            android:id="@+id/action_taskListFragment_to_addTaskFragment"
-            app:destination="@id/addTaskFragment" />
-        <action
-            android:id="@+id/action_taskListFragment_to_updateTaskFragment"
-            app:destination="@id/updateTaskFragment" />
+            android:id="@+id/action_taskListFragment_to_addEditTaskFragment"
+            app:destination="@id/addEditTaskFragment" />
     </fragment>
     <fragment
-        android:id="@+id/addTaskFragment"
-        android:name="my.com.tasktodosample.fragments.addtask.AddTaskFragment"
-        android:label="@string/addTaskLabel"
-        tools:layout="@layout/fragment_add_task" >
+        android:id="@+id/addEditTaskFragment"
+        android:name="my.com.tasktodosample.fragments.addedittask.AddEditTaskFragment"
+        tools:layout="@layout/fragment_add_edit_task">
         <action
-            android:id="@+id/action_addTaskFragment_to_taskListFragment"
-            app:destination="@id/taskListFragment"
-            app:popUpTo="@id/nav"
-            app:popUpToInclusive="true"/>
-    </fragment>
-    <fragment
-        android:id="@+id/updateTaskFragment"
-        android:name="my.com.tasktodosample.fragments.updatetask.UpdateTaskFragment"
-        android:label="@string/update_task_label"
-        tools:layout="@layout/fragment_update_task">
-        <action
-            android:id="@+id/action_updateTaskFragment_to_taskListFragment"
+            android:id="@+id/action_addEditTaskFragment_to_taskListFragment"
             app:destination="@id/taskListFragment"
             app:popUpTo="@id/nav"
             app:popUpToInclusive="true" />
-        <argument
-            android:name="currentTask"
-            app:argType="my.com.tasktodosample.model.Task" />
     </fragment>
 </navigation>

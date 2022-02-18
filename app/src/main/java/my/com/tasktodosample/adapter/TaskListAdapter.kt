@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import my.com.tasktodosample.R
-import my.com.tasktodosample.fragments.listtask.TaskListFragmentDirections
 import my.com.tasktodosample.model.Task
 
-class TaskListAdapter: RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
+class TaskListAdapter(
+    val fn: (ViewHolder, Task) -> Unit = { _, _ -> }
+): RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
 
     private var taskList = emptyList<Task>()
 
@@ -64,12 +67,7 @@ class TaskListAdapter: RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
             holder.itemLayout.setBackgroundColor(ContextCompat.getColor(holder.context, R.color.traffic_purple))
         }
 
-        holder.root.setOnClickListener {
-
-            val action = TaskListFragmentDirections.actionTaskListFragmentToUpdateTaskFragment(currentTask)
-            holder.root.findNavController().navigate(action)
-
-        }
+        fn(holder, currentTask)
 
     }
 

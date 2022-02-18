@@ -1,12 +1,9 @@
 package my.com.tasktodosample.model
 
-import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.parcelize.Parcelize
 
-@Parcelize
 @Entity(tableName = "task_table")
 data class Task(
 
@@ -25,4 +22,4 @@ data class Task(
     @ColumnInfo(name = "completed")
     val taskCompleted: Boolean
 
-): Parcelable
+)

@@ -17,4 +17,5 @@
     <string name="update_task_label">Update Task</string>
     <string name="complete_task">Complete Task</string>
     <string name="delete_menu_item">Delete</string>
+    <string name="completed">Completed</string>
 </resources>

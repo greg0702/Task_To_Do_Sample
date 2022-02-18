@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
+import my.com.tasktodosample.MainActivity
 import my.com.tasktodosample.R
 import my.com.tasktodosample.adapter.TaskListAdapter
 import my.com.tasktodosample.databinding.FragmentTaskListBinding
@@ -25,9 +27,21 @@ class TaskListFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
+        val main = activity as MainActivity
+
+        main.title = getString(R.string.taskListLabel)
+
         binding = FragmentTaskListBinding.inflate(inflater, container, false)
 
-        val adapter = TaskListAdapter()
+        val adapter = TaskListAdapter{ holder, task ->
+
+            val testList: List<String> = arrayListOf("Test", "Testing")
+
+            holder.root.setOnClickListener { nav.navigate(R.id.action_taskListFragment_to_addEditTaskFragment,
+                bundleOf("taskId" to task.id, "taskTitle" to task.taskTitle, "taskBody" to task.taskBody,
+                "taskImagePath" to task.taskImage, "taskCompleted" to task.taskCompleted, "isEdit" to 1, "testList" to testList)) }
+
+        }
         binding.rvTaskList.adapter = adapter
         binding.rvTaskList.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
@@ -42,7 +56,7 @@ class TaskListFragment : Fragment() {
             else{ setHasOptionsMenu(true) }
         }
 
-        binding.addFab.setOnClickListener { nav.navigate(R.id.action_taskListFragment_to_addTaskFragment) }
+        binding.addFab.setOnClickListener { nav.navigate(R.id.action_taskListFragment_to_addEditTaskFragment, bundleOf("isEdit" to 0)) }
 
         return binding.root
 
