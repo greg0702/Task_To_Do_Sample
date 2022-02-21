@@ -17,7 +17,7 @@ data class Task(
     val taskBody: String,
 
     @ColumnInfo(name = "image_path")
-    val taskImage: String,
+    val taskImage: List<String>,
 
     @ColumnInfo(name = "completed")
     val taskCompleted: Boolean

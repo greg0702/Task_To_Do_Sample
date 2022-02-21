@@ -3,6 +3,7 @@ package my.com.tasktodosample.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import my.com.tasktodosample.data.TaskDatabase
@@ -13,6 +14,9 @@ class TaskViewModel(application: Application): AndroidViewModel(application){
 
     private val tasksList: LiveData<List<Task>>
     private val taskRepo: TaskRepository
+
+    private val imageLiveData: MutableLiveData<List<String>> = MutableLiveData()
+    private val currentImageList = ArrayList<String>()
 
     init {
         val taskDao = TaskDatabase.getDb(application).taskDao()
@@ -37,5 +41,17 @@ class TaskViewModel(application: Application): AndroidViewModel(application){
     }
 
     fun getAllTasks(): LiveData<List<Task>>{ return tasksList }
+
+    fun setImageList(path: String){
+        currentImageList.add(path)
+        imageLiveData.value = currentImageList
+    }
+
+    fun getImageList(): LiveData<List<String>>{ return imageLiveData }
+
+    fun removeImage(path: String){
+        currentImageList.remove(path)
+        imageLiveData.value = currentImageList
+    }
 
 }

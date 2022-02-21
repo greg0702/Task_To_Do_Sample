@@ -84,35 +84,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtImg" />
 
-    <FrameLayout
-        android:id="@+id/imgPreviewLayout"
-        android:layout_width="0dp"
+    <ImageView
+        android:id="@+id/imgPlaceHolder"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:src="@drawable/img_placeholder"
+        android:padding="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/checkBoxCompleted"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnAddImg"
+        tools:ignore="ContentDescription"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/imgViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
         android:padding="10dp"
         app:layout_constraintBottom_toTopOf="@+id/checkBoxCompleted"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnAddImg">
 
-        <ImageView
-            android:id="@+id/imgPreview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/img_placeholder"
-            tools:ignore="ContentDescription,ImageContrastCheck" />
 
-        <ImageView
-            android:id="@+id/btnRemoveImg"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="end"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_remove"
-            tools:ignore="ContentDescription" />
-    </FrameLayout>
+    </androidx.viewpager2.widget.ViewPager2>
 
     <Button
         android:id="@+id/btnAddUpdateTask"

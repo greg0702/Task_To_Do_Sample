@@ -3,7 +3,6 @@ package my.com.tasktodosample.fragments.addedittask
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -15,13 +14,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import my.com.tasktodosample.MainActivity
 import my.com.tasktodosample.R
+import my.com.tasktodosample.adapter.TaskViewPagerAdapter
 import my.com.tasktodosample.databinding.FragmentAddEditTaskBinding
 import my.com.tasktodosample.model.Task
 import my.com.tasktodosample.viewmodel.TaskViewModel
@@ -37,17 +32,18 @@ class AddEditTaskFragment : Fragment() {
     private val REQUEST_IMAGE_CAPTURE: Int = 123
     private val REQUEST_SELECT_IMAGE: Int = 200
     private var currentImagePath: String = ""
+    private var listOfImage: List<String> = emptyList()
 
     private lateinit var binding: FragmentAddEditTaskBinding
     private lateinit var taskViewModel: TaskViewModel
+    private lateinit var adapter: TaskViewPagerAdapter
 
     private val nav by lazy { findNavController() }
     private val taskId by lazy { arguments?.getInt("taskId", 0) ?: 0 }
     private val taskTitle by lazy { arguments?.getString("taskTitle", "") ?: "" }
     private val taskBody by lazy { arguments?.getString("taskBody", "") ?: "" }
-    private val taskImagePath by lazy { arguments?.getString("taskImagePath", "") ?: "" }
     private val taskCompleted by lazy { arguments?.getBoolean("taskCompleted", false) ?: false }
-    private val testList by lazy { arguments?.getStringArrayList("testList") }
+    private val taskImagePath by lazy { arguments?.getStringArrayList("taskImagePath") }
     private val isEdit by lazy { arguments?.getInt("isEdit", 0) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -58,26 +54,41 @@ class AddEditTaskFragment : Fragment() {
 
         taskViewModel = ViewModelProvider(this)[TaskViewModel::class.java]
 
-        if (isEdit == 0){
+        adapter = TaskViewPagerAdapter{ holder, path ->
 
+            if (!taskCompleted){
+                holder.btnRemoveImg.setOnClickListener {
+                    taskViewModel.removeImage(path)
+                    loadImage()
+
+                    if (listOfImage.isEmpty()){
+                        binding.imgViewPager.isVisible = false
+                        binding.imgPlaceHolder.isVisible = true
+                    }
+
+                }
+            }else{ holder.btnRemoveImg.isVisible = false }
+
+        }
+
+        binding.imgViewPager.adapter = adapter
+
+        if (isEdit == 0){
             binding.checkBoxCompleted.isVisible = false
+            binding.imgViewPager.isVisible = false
             binding.txtTaskHeader.text = getString(R.string.add_task)
             binding.txtImg.text = getString(R.string.add_task_image)
-            binding.btnRemoveImg.isVisible = false
             binding.btnAddUpdateTask.text = getString(R.string.add_task)
             setHasOptionsMenu(false)
-
         }else{
             loadTask()
-
-            if (taskCompleted){
-                setUneditable()
-            }
-
+            taskImagePath?.forEach { path -> Log.d(TAG, path) }
+            if (taskCompleted){ setUneditable() }
             setHasOptionsMenu(true)
         }
 
         binding.btnAddImg.setOnClickListener { selectImage() }
+
         binding.btnAddUpdateTask.setOnClickListener { inputChecking() }
 
         return binding.root
@@ -89,8 +100,6 @@ class AddEditTaskFragment : Fragment() {
         binding.txtTitle.isEnabled = false
         binding.txtBody.isEnabled = false
         binding.btnAddImg.isVisible = false
-        binding.btnRemoveImg.isVisible = false
-
         binding.checkBoxCompleted.isChecked = true
 
     }
@@ -125,7 +134,7 @@ class AddEditTaskFragment : Fragment() {
 
     private fun deleteTask() {
 
-        val task = Task(taskId, taskTitle, taskBody, taskImagePath,taskCompleted)
+        val task = Task(taskId, taskTitle, taskBody, listOfImage,taskCompleted)
 
         taskViewModel.deleteTask(task)
         Log.d(TAG, "Task $taskTitle is deleted!",)
@@ -137,23 +146,31 @@ class AddEditTaskFragment : Fragment() {
 
         binding.txtTitle.setText(taskTitle)
         binding.txtBody.setText(taskBody)
-        currentImagePath = taskImagePath
 
-        loadImage(currentImagePath)
-
-        if (taskCompleted){ binding.btnRemoveImg.isVisible = false }
+        if (taskImagePath?.isEmpty() == true){
+            binding.imgViewPager.isVisible = false
+            binding.imgPlaceHolder.isVisible = true
+        }else{
+            binding.imgPlaceHolder.isVisible = false
+            taskImagePath?.forEach { path -> taskViewModel.setImageList(path) }
+            loadImage()
+        }
 
     }
 
     private fun selectImage() {
 
-        val builder = AlertDialog.Builder(requireContext())
+        if (listOfImage.size <= 4){
+            val builder = AlertDialog.Builder(requireContext())
 
-        builder.setTitle("Add Task Image")
-        builder.setMessage("Take Photo for Image or Select From Gallery?")
-        builder.setPositiveButton("Open Camera"){ _, _ -> startCamera() }
-        builder.setNegativeButton("Select From Gallery"){ _, _ -> openGallery() }
-        builder.show()
+            builder.setTitle("Add Task Image")
+            builder.setMessage("Take Photo for Image or Select From Gallery?")
+            builder.setPositiveButton("Open Camera"){ _, _ -> startCamera() }
+            builder.setNegativeButton("Select From Gallery"){ _, _ -> openGallery() }
+            builder.show()
+        }else{
+            Toast.makeText(requireContext(), "Cannot select more than 5 images!", Toast.LENGTH_SHORT).show()
+        }
 
     }
 
@@ -195,58 +212,28 @@ class AddEditTaskFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            binding.btnRemoveImg.isVisible = true
-            Log.d(TAG, currentImagePath)
-        }
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) { taskViewModel.setImageList(currentImagePath) }
 
         if (requestCode == REQUEST_SELECT_IMAGE && resultCode == Activity.RESULT_OK){
             currentImagePath = data?.data.toString()
-            binding.btnRemoveImg.isVisible = true
-            Log.d(TAG, currentImagePath)
+            taskViewModel.setImageList(currentImagePath)
         }
 
-        loadImage(currentImagePath)
+        binding.imgPlaceHolder.isVisible = false
+        binding.imgViewPager.isVisible = true
+
+        loadImage()
 
     }
 
-    private fun removeImage() {
-        binding.imgPreview.setImageResource(R.drawable.img_placeholder)
-        binding.btnRemoveImg.isVisible = false
-        currentImagePath = ""
-    }
+    private fun loadImage(){
 
-    private fun loadImage(path: String){
-
-        if (path == ""){
-            Log.d(TAG, "There is no image")
-            binding.imgPreview.setImageResource(R.drawable.img_placeholder)
-            binding.btnRemoveImg.isVisible = false
-        }else{
-            Log.d(TAG, "There is a image")
-            Glide.with(requireContext())
-                .load(path)
-                .placeholder(R.drawable.img_placeholder)
-                .fitCenter()
-                .error(R.drawable.ic_error_loading)
-                .listener(object: RequestListener<Drawable> {
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                        Log.e(TAG, "Image loading error. ${e.toString()}", e)
-                        Toast.makeText(requireContext(), "Error loading image preview", Toast.LENGTH_SHORT).show()
-                        return false
-                    }
-
-                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                        Log.d(TAG, "Image loaded successfully")
-                        return false
-                    }
-                })
-                .into(binding.imgPreview)
-            binding.btnRemoveImg.isVisible = true
-
-            binding.btnRemoveImg.setOnClickListener { removeImage() }
-
+        taskViewModel.getImageList().observe(viewLifecycleOwner){
+            adapter.setImageList(it)
+            listOfImage = it
         }
+
+        binding.imgViewPager.setCurrentItem(listOfImage.size - 1, true)
 
     }
 
@@ -260,21 +247,21 @@ class AddEditTaskFragment : Fragment() {
 
             if (isEdit == 0){
                 Log.d(TAG, "Now is adding task!")
-                addTask(title,body,currentImagePath)
+                addTask(title,body,listOfImage)
             }else{
                 Log.d(TAG, "Now is editing task!")
                 val completed = binding.checkBoxCompleted.isChecked
-                updateTask(title,body,currentImagePath, completed)
+                updateTask(title,body,listOfImage, completed)
             }
 
         }
 
     }
 
-    private fun addTask(title: String, body: String, imagePath: String) {
+    private fun addTask(title: String, body: String, imagePath: List<String>) {
 
-        if (imagePath == ""){ Log.d(TAG,"No Image selected or taken") }
-        else{ Log.d(TAG, "Image from $imagePath is stored") }
+        if (imagePath.isEmpty()){ Log.d(TAG,"No Image selected or taken") }
+        else{ imagePath.forEach { Log.d(TAG, "Image from $it is stored") } }
 
         val task = Task(0, title, body, imagePath, false)
 
@@ -287,10 +274,10 @@ class AddEditTaskFragment : Fragment() {
 
     }
 
-    private fun updateTask(title: String, body: String, imagePath: String, completed: Boolean) {
+    private fun updateTask(title: String, body: String, imagePath: List<String>, completed: Boolean) {
 
-        if (imagePath == ""){ Log.d(TAG,"No Image selected or taken") }
-        else{ Log.d(TAG, "Image from $imagePath is stored") }
+        if (imagePath.isEmpty()){ Log.d(TAG,"No Image selected or taken") }
+        else{ imagePath.forEach { Log.d(TAG, "Image from $it is stored") } }
 
         val task = Task(taskId, title, body, imagePath,completed)
 

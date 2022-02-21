@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'kotlinx-serialization'
 }
 
 android {
@@ -63,5 +64,11 @@ dependencies {
     //Glide implementation
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+    //viewpager2 implementation
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+
+    //Kotlin serialization implementation
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
 
 }

@@ -35,11 +35,9 @@ class TaskListFragment : Fragment() {
 
         val adapter = TaskListAdapter{ holder, task ->
 
-            val testList: List<String> = arrayListOf("Test", "Testing")
-
             holder.root.setOnClickListener { nav.navigate(R.id.action_taskListFragment_to_addEditTaskFragment,
                 bundleOf("taskId" to task.id, "taskTitle" to task.taskTitle, "taskBody" to task.taskBody,
-                "taskImagePath" to task.taskImage, "taskCompleted" to task.taskCompleted, "isEdit" to 1, "testList" to testList)) }
+                "taskImagePath" to task.taskImage, "taskCompleted" to task.taskCompleted, "isEdit" to 1)) }
 
         }
         binding.rvTaskList.adapter = adapter
